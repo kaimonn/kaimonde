@@ -1,1 +1,76 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>旅行記ブログ</title>
 
+  <!-- Leaflet CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+
+  <!-- メインCSS -->
+  <link rel="stylesheet" href="css/style.css" />
+
+  <style>
+    body { font-family: sans-serif; margin:0; padding:0; line-height:1.6; }
+    header, footer { background:#333; color:#fff; padding:1rem; text-align:center; }
+    main { padding:1rem; max-width:900px; margin:auto; }
+    h1, h2 { color:#333; }
+    .photo { max-width:100%; height:auto; margin-bottom:1rem; }
+    #map { height:400px; width:100%; margin-bottom:1rem; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>私の旅行記ブログ</h1>
+  </header>
+
+  <main>
+    <h2>パリ旅行 2025年1月</h2>
+
+    <p>パリでの素敵な1日を記録します。写真と地図を使って振り返ります。</p>
+
+    <!-- 写真例（Cloudinaryなど外部URL） -->
+    <img class="photo" src="https://res.cloudinary.com/xxxx/image/upload/v1234/paris01.jpg" alt="エッフェル塔">
+
+    <img class="photo" src="https://res.cloudinary.com/xxxx/image/upload/v1234/louvre01.jpg" alt="ルーブル美術館">
+
+    <!-- Leaflet 地図 -->
+    <div id="map"></div>
+
+  </main>
+
+  <footer>
+    <p>© 2026 旅行記ブログ</p>
+  </footer>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- メインJS -->
+  <script src="js/main.js"></script>
+
+  <script>
+    // 地図初期化
+    const map = L.map('map').setView([48.8566, 2.3522], 13);
+
+    // タイルレイヤー
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // マーカー例
+    L.marker([48.8584, 2.2945]).addTo(map)
+      .bindPopup('エッフェル塔')
+      .openPopup();
+
+    L.marker([48.8606, 2.3376]).addTo(map)
+      .bindPopup('ルーブル美術館');
+  </script>
+
+</body>
+</html>
