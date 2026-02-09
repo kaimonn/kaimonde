@@ -25,34 +25,33 @@
 </head>
 <body>
 
-  <header>
-    <h1>私の旅行記ブログ</h1>
-  </header>
+  <!-- ヘッダーはJSで読み込まれる -->
 
   <main>
     <h2>パリ旅行 2025年1月</h2>
 
     <p>パリでの素敵な1日を記録します。写真と地図を使って振り返ります。</p>
 
-    <!-- 写真例（Cloudinaryなど外部URL） -->
     <img class="photo" src="https://res.cloudinary.com/xxxx/image/upload/v1234/paris01.jpg" alt="エッフェル塔">
-
     <img class="photo" src="https://res.cloudinary.com/xxxx/image/upload/v1234/louvre01.jpg" alt="ルーブル美術館">
 
-    <!-- Leaflet 地図 -->
     <div id="map"></div>
-
   </main>
 
   <footer>
     <p>© 2026 旅行記ブログ</p>
   </footer>
 
-  <!-- Leaflet JS -->
+  <!-- Leaflet -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-  <!-- メインJS -->
+  <!-- ヘッダー -->
+  <script src="js/header.js"></script>
+
+  <!-- メイン -->
   <script src="js/main.js"></script>
+
+
 
   <script>
     // 地図初期化
