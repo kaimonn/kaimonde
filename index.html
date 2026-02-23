@@ -43,7 +43,7 @@
   <!-- JavaScript（言語切り替え + モバイルメニュー） -->
   <script>
   // ヘッダーを非同期で読み込み
-  fetch('components/header.html')
+  fetch('./components/header.html')
     .then(response => {
       if (!response.ok) throw new Error('ヘッダー読み込み失敗');
       return response.text();
