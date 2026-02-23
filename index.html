@@ -1,36 +1,108 @@
 <!-- index.html -->
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" class="scroll-smooth">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ブログ</title>
-    <link rel="stylesheet" href="css/styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>私のブログ</title>
+  
+  <!-- Tailwind CSS CDN (最新版) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts (読みやすい日本語対応フォント) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      font-family: 'Noto Sans JP', 'Inter', system-ui, sans-serif;
+    }
+  </style>
 </head>
-<body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="#">ホーム</a></li>
-                <li><a href="#">概要</a></li>
-                <li><a href="#">記事一覧</a></li>
-                <li><a href="#">分類</a></li>
-                <li><a href="#">タグ</a></li>
-            </ul>
-            <div id="language-switcher">
-                <select id="lang-select">
-                    <option value="ja">日本語</option>
-                    <option value="en">English</option>
-                    <option value="fr">Français</option>
-                </select>
-            </div>
+<body class="bg-gray-50 text-gray-900 antialiased">
+
+  <!-- ヘッダー（sticky + 影で浮き感） -->
+  <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200 shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        
+        <!-- ロゴ / サイト名 -->
+        <a href="#" class="text-2xl font-bold text-gray-900 hover:text-indigo-600 transition">
+          Blog
+        </a>
+
+        <!-- ナビゲーション（デスクトップ） -->
+        <nav class="hidden md:flex items-center space-x-8">
+          <a href="#" class="text-gray-600 hover:text-indigo-600 font-medium transition">ホーム</a>
+          <a href="#" class="text-gray-600 hover:text-indigo-600 font-medium transition">概要</a>
+          <a href="#" class="text-gray-600 hover:text-indigo-600 font-medium transition">記事一覧</a>
+          <a href="#" class="text-gray-600 hover:text-indigo-600 font-medium transition">分類</a>
+          <a href="#" class="text-gray-600 hover:text-indigo-600 font-medium transition">タグ</a>
         </nav>
-    </header>
-    <main>
-        <!-- ここにコンテンツを追加 -->
-        <h1>ようこそ</h1>
-        <p>これはブログの骨組みです。</p>
-    </main>
-    <script src="js/script.js"></script>
+
+        <!-- 言語セレクター + モバイルメニュー開閉ボタン -->
+        <div class="flex items-center space-x-4">
+          <!-- 言語切り替え -->
+          <div class="relative">
+            <select id="lang-select" class="bg-transparent border border-gray-300 text-gray-700 text-sm rounded-md px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer">
+              <option value="ja">日本語</option>
+              <option value="en">English</option>
+              <option value="fr">Français</option>
+            </select>
+          </div>
+
+          <!-- モバイル用ハンバーガーメニュー（md以下で表示） -->
+          <button id="mobile-menu-btn" class="md:hidden text-gray-600 focus:outline-none">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- モバイルメニュー（隠れている状態） -->
+  <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-gray-200">
+    <div class="px-4 py-6 space-y-4">
+      <a href="#" class="block text-gray-600 hover:text-indigo-600 font-medium">ホーム</a>
+      <a href="#" class="block text-gray-600 hover:text-indigo-600 font-medium">概要</a>
+      <a href="#" class="block text-gray-600 hover:text-indigo-600 font-medium">記事一覧</a>
+      <a href="#" class="block text-gray-600 hover:text-indigo-600 font-medium">分類</a>
+      <a href="#" class="block text-gray-600 hover:text-indigo-600 font-medium">タグ</a>
+    </div>
+  </div>
+
+  <!-- メインコンテンツ（仮） -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">ようこそ、私のブログへ</h1>
+    <p class="text-xl text-gray-600 max-w-3xl">
+      ここでは日々の気づきや技術的なメモ、旅の記録などをゆるく書いています。
+    </p>
+    <!-- ここに記事カードなどを後で追加 -->
+  </main>
+
+  <!-- シンプルなフッター -->
+  <footer class="bg-gray-900 text-gray-400 py-8 text-center">
+    <p>&copy; 2026 私のブログ. All rights reserved.</p>
+  </footer>
+
+  <!-- JavaScript（言語切り替え + モバイルメニュー） -->
+  <script>
+    // モバイルメニューの開閉
+    const btn = document.getElementById('mobile-menu-btn');
+    const menu = document.getElementById('mobile-menu');
+    btn.addEventListener('click', () => {
+      menu.classList.toggle('hidden');
+    });
+
+    // 言語切り替え（仮）
+    document.getElementById('lang-select').addEventListener('change', (e) => {
+      const lang = e.target.value;
+      document.documentElement.lang = lang;
+      alert(`言語を ${lang} に切り替えました（実装は後で）`);
+    });
+  </script>
 </body>
 </html>
