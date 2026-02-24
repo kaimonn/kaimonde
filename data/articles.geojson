@@ -1,6 +1,64 @@
 {
   "type": "FeatureCollection",
   "features": [
+
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [0, 20]
+      },
+      "properties": {
+        "title": "EUにおける持続可能な都市政策",
+        "date": "2026-01-10",
+        "category": "都市政策",
+        "level": "global",
+        "country": null,
+        "region": null,
+        "city": null,
+        "description": "EU全体で進む持続可能都市戦略の比較分析。",
+        "url": "/kaimonde/pages/article-eu-policy.html"
+      }
+    },
+
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.2137, 46.2276]
+      },
+      "properties": {
+        "title": "フランスの交通政策改革",
+        "date": "2026-02-20",
+        "category": "交通",
+        "level": "country",
+        "country": "France",
+        "region": null,
+        "city": null,
+        "description": "全国レベルで進む鉄道・公共交通改革の整理。",
+        "url": "/kaimonde/pages/article-france-transport.html"
+      }
+    },
+
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [3.0000, 43.9000]
+      },
+      "properties": {
+        "title": "Occitanie州の地域交通戦略",
+        "date": "2026-03-05",
+        "category": "地域政策",
+        "level": "region",
+        "country": "France",
+        "region": "Occitanie",
+        "city": null,
+        "description": "フランス南部オクシタニー地域の広域交通計画。",
+        "url": "/kaimonde/pages/article-occitanie-transport.html"
+      }
+    },
+
     {
       "type": "Feature",
       "geometry": {
@@ -11,12 +69,15 @@
         "title": "モンペリエのトラム計画",
         "date": "2026-02-01",
         "category": "都市計画",
+        "level": "city",
         "country": "France",
+        "region": "Occitanie",
         "city": "Montpellier",
-        "description": "フランス地方都市の公共交通整備。",
+        "description": "フランス地方都市におけるLRT整備の事例。",
         "url": "/kaimonde/pages/article-montpellier-tram.html"
       }
     },
+
     {
       "type": "Feature",
       "geometry": {
@@ -27,11 +88,14 @@
         "title": "モンペリエの自転車政策",
         "date": "2026-03-01",
         "category": "交通",
+        "level": "city",
         "country": "France",
+        "region": "Occitanie",
         "city": "Montpellier",
-        "description": "自転車インフラ整備の分析。",
+        "description": "自転車インフラ拡充とモーダルシフト戦略。",
         "url": "/kaimonde/pages/article-montpellier-bike.html"
       }
     }
+
   ]
 }
