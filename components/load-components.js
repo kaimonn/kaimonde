@@ -22,7 +22,7 @@ fetch("/kaimonde/components/header.html")
       langSelect.addEventListener('change', (e) => {
         const lang = e.target.value;
         document.documentElement.lang = lang;
-        alert(`言語を ${lang} に切り替えました（実装は後で）`);
+        alert(`This feature has not been implemented yet.`);
       });
     }
   })
