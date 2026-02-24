@@ -35,32 +35,7 @@
 
   <div id="footer"></div>
 
-  <!-- JavaScript（言語切り替え + モバイルメニュー） -->
-  <script>
-    fetch("./components/header.html")
-    .then(res => res.text())
-    .then(data => {
-      document.getElementById("header").innerHTML = data;
- 
-      // header挿入後にイベント登録
-      const btn = document.getElementById('mobile-menu-btn');
-      const menu = document.getElementById('mobile-menu');
- 
-      if (btn && menu) {
-        btn.addEventListener('click', () => {
-          menu.classList.toggle('hidden');
-        });
-      }
-    })
-    .catch(err => console.error("Header load failed:", err));
+  <script src="./components/load-components.js"></script>
 
-    fetch("./components/footer.html")
-    .then(res => res.text())
-    .then(data => {
-      document.getElementById("footer").innerHTML = data;
-    })
-    .catch(err => console.error("Footer load failed:", err));
-
-  </script>
 </body>
 </html>
