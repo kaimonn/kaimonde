@@ -54,12 +54,7 @@
       }
     })
     .catch(err => console.error("Header load failed:", err));
-    // モバイルメニューの開閉
-    const btn = document.getElementById('mobile-menu-btn');
-    const menu = document.getElementById('mobile-menu');
-    btn.addEventListener('click', () => {
-      menu.classList.toggle('hidden');
-    });
+
 
     // 言語切り替え（仮）
     document.getElementById('lang-select').addEventListener('change', (e) => {
