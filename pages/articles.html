@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ja" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Articles - KaiMonde</title>
+  
+  <!-- Tailwind CDN（※本番ではビルド推奨） -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      font-family: 'Noto Sans JP', 'Inter', system-ui, sans-serif;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50 text-gray-900 antialiased">
+
+  <!-- Header -->
+  <div id="header"></div>
+
+  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+
+    <!-- タイトル -->
+    <section class="mb-12">
+      <h1 class="text-4xl md:text-5xl font-bold mb-4">Articles</h1>
+      <p class="text-gray-600 text-lg">
+        都市計画、交通、留学生活、旅行記などについての記事一覧。
+      </p>
+    </section>
+
+    <!-- 記事一覧 -->
+    <section>
+      <div id="articles-list"
+           class="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+      </div>
+
+      <!-- 記事がない場合 -->
+      <p id="no-articles"
+         class="text-gray-500 mt-8 hidden">
+        まだ記事がありません。
+      </p>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <div id="footer"></div>
+
+  <!-- 記事読み込みスクリプト -->
+  <script>
+    fetch("/kaimonde/data/articles.json")
+      .then(res => res.json())
+      .then(data => {
+
+        const container = document.getElementById("articles-list");
+        const emptyMessage = document.getElementById("no-articles");
+
+        if (!data || data.length === 0) {
+          emptyMessage.classList.remove("hidden");
+          return;
+        }
+
+        // 日付の新しい順に並び替え
+        data.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        data.forEach(article => {
+
+          const card = document.createElement("a");
+          card.href = article.url;
+          card.className =
+            "block bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition duration-200";
+
+          card.innerHTML = `
+            <p class="text-sm text-gray-500">
+              ${article.date} ・ ${article.category}
+            </p>
+            <h3 class="text-xl font-semibold mt-2">
+              ${article.title}
+            </h3>
+            <p class="text-gray-600 mt-3">
+              ${article.description}
+            </p>
+          `;
+
+          container.appendChild(card);
+        });
+
+      })
+      .catch(err => {
+        console.error("Articles load failed:", err);
+        document.getElementById("no-articles").classList.remove("hidden");
+      });
+  </script>
+
+  <!-- 共通コンポーネント -->
+  <script src="/kaimonde/components/load-components.js"></script>
+
+</body>
+</html>
