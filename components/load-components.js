@@ -1,7 +1,7 @@
 // components/load-components.js
 
 // header を読み込み
-fetch("./components/header.html")
+fetch("https://kaimonn.github.io/kaimonde/components/header.html")
   .then(res => res.text())
   .then(data => {
     document.getElementById("header").innerHTML = data;
@@ -29,7 +29,7 @@ fetch("./components/header.html")
   .catch(err => console.error("Header load failed:", err));
 
 // footer を読み込み
-fetch("./components/footer.html")
+fetch("https://kaimonn.github.io/kaimonde//components/footer.html")
   .then(res => res.text())
   .then(data => {
     document.getElementById("footer").innerHTML = data;
