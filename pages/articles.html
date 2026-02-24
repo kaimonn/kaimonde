@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Articles - KaiMonde</title>
   
-  <!-- Tailwind CDN（※本番ではビルド推奨） -->
+  <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   
   <!-- Fonts -->
@@ -53,24 +53,27 @@
   <!-- Footer -->
   <div id="footer"></div>
 
-  <!-- 記事読み込みスクリプト -->
+  <!-- 記事読み込みスクリプト（GeoJSON対応） -->
   <script>
-    fetch("/kaimonde/data/articles.json")
+    fetch("/kaimonde/data/articles.geojson")
       .then(res => res.json())
       .then(data => {
 
         const container = document.getElementById("articles-list");
         const emptyMessage = document.getElementById("no-articles");
 
-        if (!data || data.length === 0) {
+        if (!data || !data.features || data.features.length === 0) {
           emptyMessage.classList.remove("hidden");
           return;
         }
 
-        // 日付の新しい順に並び替え
-        data.sort((a, b) => new Date(b.date) - new Date(a.date));
+        // properties を取り出して配列化
+        const articles = data.features.map(feature => feature.properties);
 
-        data.forEach(article => {
+        // 日付の新しい順に並び替え
+        articles.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        articles.forEach(article => {
 
           const card = document.createElement("a");
           card.href = article.url;
@@ -86,6 +89,9 @@
             </h3>
             <p class="text-gray-600 mt-3">
               ${article.description}
+            </p>
+            <p class="text-xs text-gray-400 mt-4">
+              📍 ${article.city}, ${article.country}
             </p>
           `;
 
