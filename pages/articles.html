@@ -53,7 +53,7 @@
   <!-- Footer -->
   <div id="footer"></div>
 
-  <!-- 記事読み込みスクリプト（GeoJSON対応） -->
+  <!-- 記事読み込みスクリプト（GeoJSON対応、null安全） -->
   <script>
     fetch("/kaimonde/data/articles.geojson")
       .then(res => res.json())
@@ -80,6 +80,11 @@
           card.className =
             "block bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition duration-200";
 
+          // city / country が null の場合は空文字にする
+          const city = article.city ? article.city : '';
+          const country = article.country ? article.country : '';
+          const location = (city || country) ? `📍 ${city}${city && country ? ', ' : ''}${country}` : '';
+
           card.innerHTML = `
             <p class="text-sm text-gray-500">
               ${article.date} ・ ${article.category}
@@ -90,9 +95,7 @@
             <p class="text-gray-600 mt-3">
               ${article.description}
             </p>
-            <p class="text-xs text-gray-400 mt-4">
-              📍 ${article.city}, ${article.country}
-            </p>
+            ${location ? `<p class="text-xs text-gray-400 mt-4">${location}</p>` : ''}
           `;
 
           container.appendChild(card);
