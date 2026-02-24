@@ -1,28 +1,78 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" class="scroll-smooth">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>KaiMonde - Home</title>
+<title>KaiMonde - ホーム</title>
 
+<!-- Tailwind -->
 <script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+<!-- Leaflet -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <style>
-  #articles-map { height: 600px; }
+body { font-family: 'Noto Sans JP', sans-serif; }
+
+#articles-map {
+  height: 600px;
+  border-radius: 0.75rem;
+}
+
+.article-badge {
+  background: #2563eb;
+  color: white;
+  border-radius: 9999px;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.25);
+  border: 3px solid white;
+  transition: transform .15s ease;
+}
+.article-badge:hover {
+  transform: scale(1.15);
+}
 </style>
 </head>
 
-<body class="bg-gray-100">
+<body class="bg-gray-50 text-gray-900">
 
-<div class="flex h-screen">
+<!-- 共通Header -->
+<div id="header"></div>
 
-  <!-- 左サイドバー -->
-  <div id="sidebar" class="w-1/3 bg-white overflow-y-auto p-6 border-r">
-    <h2 class="text-2xl font-bold mb-4">記事一覧</h2>
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+
+<!-- ヒーロー -->
+<section>
+<h1 class="text-4xl font-bold mb-6">世界を読み解く</h1>
+<p class="text-lg text-gray-700 max-w-3xl">
+都市・地域・国家レベルで政策や社会動向を分析するプロジェクト。
+地図から記事を探せます。
+</p>
+</section>
+
+<!-- 地図セクション -->
+<section>
+<h2 class="text-3xl font-bold mb-6">記事マップ</h2>
+
+<div class="flex gap-6">
+
+  <!-- サイドバー -->
+  <div id="sidebar"
+       class="w-1/3 bg-white rounded-xl shadow p-6 overflow-y-auto"
+       style="max-height:600px;">
+    <h3 class="text-xl font-semibold mb-4">記事一覧</h3>
     <div id="article-list">
-      <p class="text-gray-500">マーカーをクリックしてください</p>
+      <p class="text-gray-400">マーカーをクリックしてください</p>
     </div>
   </div>
 
@@ -32,8 +82,23 @@
   </div>
 
 </div>
+</section>
+
+<!-- 最近の記事 -->
+<section>
+<h2 class="text-3xl font-bold mb-6">最近の記事</h2>
+<div id="recent-articles"
+     class="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3"></div>
+<p id="no-articles" class="text-gray-500 hidden">まだ記事がありません。</p>
+</section>
+
+</main>
+
+<!-- 共通Footer -->
+<div id="footer"></div>
 
 <script>
+
 const map = L.map('articles-map').setView([46.0,2.0],5);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
@@ -46,23 +111,20 @@ let currentLayer;
 fetch("/kaimonde/data/articles.geojson")
 .then(res=>res.json())
 .then(data=>{
+
   allFeatures = data.features;
+
+  renderRecentArticles();
   renderMarkers();
+
   map.on("zoomend", renderMarkers);
+
 });
 
 function getGroupKey(props, zoom){
-  if(zoom < 6){
-    return props.country || "global";
-  }
-  if(zoom < 9){
-    return props.region || props.country;
-  }
+  if(zoom < 6) return props.country || "global";
+  if(zoom < 9) return props.region || props.country;
   return props.city || props.region || props.country;
-}
-
-function getRepresentativeFeature(group){
-  return group[0]; // 代表点は最初の記事の座標を使用
 }
 
 function renderMarkers(){
@@ -81,17 +143,26 @@ function renderMarkers(){
   currentLayer = L.layerGroup();
 
   Object.values(groups).forEach(group=>{
-    const rep = getRepresentativeFeature(group);
+
+    const rep = group[0];
     const latlng = [
       rep.geometry.coordinates[1],
       rep.geometry.coordinates[0]
     ];
 
-    const marker = L.marker(latlng).addTo(currentLayer);
+    const count = group.length;
+    const label = count > 99 ? "99+" : count;
 
-    marker.on("click", ()=>{
-      showArticles(group);
+    const icon = L.divIcon({
+      html:`<div class="article-badge">${label}</div>`,
+      className:"",
+      iconSize:[38,38],
+      iconAnchor:[19,19]
     });
+
+    const marker = L.marker(latlng,{icon}).addTo(currentLayer);
+
+    marker.on("click",()=>showArticles(group));
 
   });
 
@@ -110,19 +181,58 @@ function showArticles(group){
 
     const card = document.createElement("a");
     card.href = p.url;
-    card.className = "block border-b py-4 hover:bg-gray-50 transition";
+    card.className="block border-b py-4 hover:bg-gray-50 transition";
 
-    card.innerHTML = `
+    card.innerHTML=`
       <p class="text-sm text-gray-500">${p.date}</p>
-      <h3 class="font-semibold text-lg">${p.title}</h3>
+      <h4 class="font-semibold text-lg">${p.title}</h4>
       <p class="text-gray-600 text-sm mt-1">${p.description}</p>
-      <p class="text-xs text-gray-400 mt-2">${(p.city||'') + ' ' + (p.country||'')}</p>
+      <p class="text-xs text-gray-400 mt-2">
+        ${(p.city||'')} ${(p.region||'')} ${(p.country||'')}
+      </p>
     `;
 
     container.appendChild(card);
   });
 }
+
+function renderRecentArticles(){
+
+  const container = document.getElementById("recent-articles");
+  const noMsg = document.getElementById("no-articles");
+
+  if(!allFeatures.length){
+    noMsg.classList.remove("hidden");
+    return;
+  }
+
+  const sorted = [...allFeatures]
+    .sort((a,b)=>new Date(b.properties.date)-new Date(a.properties.date))
+    .slice(0,6);
+
+  sorted.forEach(f=>{
+    const p = f.properties;
+
+    const card = document.createElement("a");
+    card.href = p.url;
+    card.className="block bg-white p-6 rounded-xl shadow hover:shadow-md transition";
+
+    card.innerHTML=`
+      <p class="text-sm text-gray-500">
+        ${p.date} ・ ${p.category.join(', ')}
+      </p>
+      <h3 class="text-xl font-semibold mt-2">${p.title}</h3>
+      <p class="text-gray-600 mt-3">${p.description}</p>
+    `;
+
+    container.appendChild(card);
+  });
+}
+
 </script>
+
+<!-- 共通コンポーネント -->
+<script src="/kaimonde/components/load-components.js"></script>
 
 </body>
 </html>
