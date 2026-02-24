@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ja" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About - KaiMonde</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      font-family: 'Noto Sans JP', 'Inter', system-ui, sans-serif;
+    }
+  </style>
+</head>
+
+<body class="bg-gray-50 text-gray-900 antialiased">
+  <!-- Header コンポーネント -->
+  <div id="header"></div>
+
+  <!-- メインコンテンツ -->
+  <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
+
+    <!-- ページタイトル -->
+    <section class="text-center">
+      <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">著者について</h1>
+      <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+        私は KAITO です。日々の気づきや技術的なメモ、旅行やプロジェクトの記録などをゆるく書いています。
+      </p>
+    </section>
+
+    <!-- プロフィール写真と紹介 -->
+    <section class="flex flex-col md:flex-row items-center md:items-start md:space-x-12 space-y-6 md:space-y-0">
+      <!-- プロフィール写真 -->
+      <div class="flex-shrink-0">
+        <img src="https://via.placeholder.com/200" alt="著者の写真" class="rounded-full border-2 border-gray-300 shadow-lg">
+      </div>
+
+      <!-- 経歴・リンク -->
+      <div class="space-y-4">
+        <h2 class="text-2xl font-semibold text-gray-900">自己紹介</h2>
+        <p class="text-gray-700">
+          東京出身。エンジニアとしてWeb開発に従事しつつ、ブログや旅の記録を発信。技術的な学びをまとめることが趣味です。
+        </p>
+        <p class="text-gray-700">
+          専門分野: フロントエンド開発、JavaScript、Tailwind CSS
+        </p>
+        <div>
+          <a href="https://www.linkedin.com/in/your-linkedin-id" target="_blank" class="inline-block bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition">
+            LinkedIn プロフィール
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 経歴タイムライン -->
+    <section class="text-gray-700 space-y-8">
+      <h2 class="text-2xl font-semibold text-gray-900 mb-4">経歴</h2>
+
+      <div class="border-l-2 border-indigo-600 pl-6 space-y-6">
+        <!-- 職歴 -->
+        <div class="relative">
+          <div class="absolute -left-3 top-1 w-6 h-6 bg-indigo-600 rounded-full border-2 border-white"></div>
+          <p class="font-semibold text-gray-900">2024年4月 – 現在</p>
+          <p class="text-gray-700">株式会社TechLab（東京） – フロントエンドエンジニア</p>
+          <p class="text-gray-600">Webアプリケーションの設計・開発・運用を担当。React と Tailwind CSS を用いたフロントエンド構築を行う。</p>
+        </div>
+
+        <div class="relative">
+          <div class="absolute -left-3 top-1 w-6 h-6 bg-indigo-600 rounded-full border-2 border-white"></div>
+          <p class="font-semibold text-gray-900">2022年4月 – 2024年3月</p>
+          <p class="text-gray-700">株式会社WebWorks（大阪） – ジュニアエンジニア</p>
+          <p class="text-gray-600">Webサイトの制作・運用を担当。JavaScript, HTML, CSS を中心に開発。SEO対策やページパフォーマンス改善も経験。</p>
+        </div>
+
+        <!-- 学歴 -->
+        <div class="relative">
+          <div class="absolute -left-3 top-1 w-6 h-6 bg-indigo-600 rounded-full border-2 border-white"></div>
+          <p class="font-semibold text-gray-900">2018年4月 – 2022年3月</p>
+          <p class="text-gray-700">東京大学 工学部 – 情報工学専攻</p>
+          <p class="text-gray-600">プログラミング、データ構造、アルゴリズムなどを学ぶ。卒業研究ではWebアプリケーションのパフォーマンス最適化をテーマに開発。</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 趣味・活動 -->
+    <section class="text-gray-700 space-y-2">
+      <h2 class="text-2xl font-semibold text-gray-900">趣味・活動</h2>
+      <ul class="list-disc list-inside space-y-1">
+        <li>旅行・写真撮影</li>
+        <li>技術ブログ執筆</li>
+        <li>オープンソースプロジェクトへの参加</li>
+      </ul>
+    </section>
+
+  </main>
+
+  <!-- Footer コンポーネント -->
+  <div id="footer"></div>
+
+  <!-- 共通コンポーネント読み込み -->
+  <script src="./components/load-components.js"></script>
+</body>
+</html>
