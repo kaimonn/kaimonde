@@ -3,38 +3,148 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>KaiMonde</title>
+  <title>KaiMonde - ホーム</title>
   
-  <!-- Tailwind CSS CDN (最新版) -->
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  
-  <!-- Google Fonts (読みやすい日本語対応フォント) -->
+
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-7oS0DkHAXpB0wp9sZ6m9Rw1a0VsQHf1ulq+Z4aQkIYw=" crossorigin=""/>
+
   <style>
     body {
       font-family: 'Noto Sans JP', 'Inter', system-ui, sans-serif;
     }
+    #articles-map { height: 500px; border-radius: 0.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
   </style>
 </head>
 
-  
 <body class="bg-gray-50 text-gray-900 antialiased">
+
+  <!-- Header -->
   <div id="header"></div>
 
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">ようこそ、KAITOの世界へ</h1>
-    <p class="text-xl text-gray-600 max-w-3xl">
-      ここでは日々の気づきや技術的なメモ、旅行の記録などを書いていきます。
-    </p>
-    <!-- ここに記事カードなどを後で追加 -->
+  <!-- メインコンテンツ -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+
+    <!-- ホーム紹介 -->
+    <section class="text-left">
+      <h1 class="text-4xl md:text-5xl font-bold mb-6">ようこそ、KAITOの世界へ</h1>
+      <p class="text-xl text-gray-700 max-w-3xl mb-6">
+        ここでは日々の気づきや技術的なメモ、旅の記録などをゆるく書いています。
+      </p>
+    </section>
+
+    <!-- 記事マップ -->
+    <section>
+      <h2 class="text-3xl font-bold mb-6">記事マップ</h2>
+      <div id="articles-map"></div>
+    </section>
+
+    <!-- 最近の記事一覧 -->
+    <section>
+      <h2 class="text-3xl font-bold mb-6">最近の記事</h2>
+      <div id="recent-articles" class="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3"></div>
+      <p id="no-articles" class="text-gray-500 mt-8 hidden">まだ記事がありません。</p>
+    </section>
+
   </main>
 
+  <!-- Footer -->
   <div id="footer"></div>
 
-  <script src="./components/load-components.js"></script>
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-o+SQQwX7DNPm9Qge4lmkGZl8X4J7uQfb4tU9Uph2bMk=" crossorigin=""></script>
+
+  <!-- 記事・マップ JS -->
+  <script>
+    // Leaflet 地図初期化
+    const map = L.map('articles-map').setView([46.0, 2.0], 5);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    fetch("/kaimonde/data/articles.geojson")
+      .then(res => res.json())
+      .then(data => {
+        if (!data || !data.features || data.features.length === 0) return;
+
+        const articles = data.features.map(f => f.properties);
+
+        // 最近の記事（新しい順に最大6件）
+        const recentContainer = document.getElementById('recent-articles');
+        const recentArticles = articles.sort((a,b) => new Date(b.date)-new Date(a.date)).slice(0,6);
+        if(recentArticles.length === 0) document.getElementById('no-articles').classList.remove('hidden');
+        else document.getElementById('no-articles').classList.add('hidden');
+
+        recentArticles.forEach(article => {
+          const card = document.createElement('a');
+          card.href = article.url;
+          card.className = "block bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition duration-200";
+          const city = article.city || '';
+          const country = article.country || '';
+          const location = (city || country) ? `📍 ${city}${city && country?', ':''}${country}` : '';
+          card.innerHTML = `
+            <p class="text-sm text-gray-500">${article.date} ・ ${article.category.join(', ')}</p>
+            <h3 class="text-xl font-semibold mt-2">${article.title}</h3>
+            <p class="text-gray-600 mt-3">${article.description}</p>
+            ${location ? `<p class="text-xs text-gray-400 mt-4">${location}</p>` : ''}
+          `;
+          recentContainer.appendChild(card);
+        });
+
+        // マップ描画
+        let geoLayer;
+        function getFeaturesByZoom() {
+          const zoom = map.getZoom();
+          return data.features.filter(f => {
+            const level = f.properties.level;
+            if(zoom < 6) return level==='global'||level==='country';
+            if(zoom < 9) return level==='region';
+            return level==='city';
+          });
+        }
+
+        function renderMap() {
+          if(geoLayer) geoLayer.remove();
+          const featuresToShow = getFeaturesByZoom();
+          geoLayer = L.geoJSON(featuresToShow, {
+            pointToLayer: (feature, latlng) => L.marker(latlng),
+            onEachFeature: (feature, layer) => {
+              const props = feature.properties;
+              const city = props.city || '';
+              const country = props.country || '';
+              const location = (city || country) ? `${city}${city && country?', ':''}${country}` : '';
+              let popupHTML = `
+                <strong>${props.title}</strong><br>
+                ${props.description}<br>
+                ${props.date}<br>
+                ${props.category.join(', ')}<br>
+                ${location ? '📍 '+location+'<br>':''}
+                <a href="${props.url}" target="_blank">記事を見る</a>
+              `;
+              layer.bindPopup(popupHTML);
+            }
+          }).addTo(map);
+        }
+
+        renderMap();
+        map.on('zoomend', renderMap);
+
+      })
+      .catch(err => console.error("Articles load failed:", err));
+  </script>
+
+  <!-- 共通コンポーネント -->
+  <script src="/kaimonde/components/load-components.js"></script>
 
 </body>
 </html>
