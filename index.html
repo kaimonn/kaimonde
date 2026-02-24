@@ -1,148 +1,128 @@
 <!DOCTYPE html>
-<html lang="ja" class="scroll-smooth">
+<html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>KaiMonde - ホーム</title>
-  
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>KaiMonde - Home</title>
 
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-  <!-- Leaflet CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-
-  <style>
-    body {
-      font-family: 'Noto Sans JP', 'Inter', system-ui, sans-serif;
-    }
-    #articles-map { height: 500px; border-radius: 0.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-  </style>
+<style>
+  #articles-map { height: 600px; }
+</style>
 </head>
 
-<body class="bg-gray-50 text-gray-900 antialiased">
+<body class="bg-gray-100">
 
-  <!-- Header -->
-  <div id="header"></div>
+<div class="flex h-screen">
 
-  <!-- メインコンテンツ -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-16">
+  <!-- 左サイドバー -->
+  <div id="sidebar" class="w-1/3 bg-white overflow-y-auto p-6 border-r">
+    <h2 class="text-2xl font-bold mb-4">記事一覧</h2>
+    <div id="article-list">
+      <p class="text-gray-500">マーカーをクリックしてください</p>
+    </div>
+  </div>
 
-    <!-- ホーム紹介 -->
-    <section class="text-left">
-      <h1 class="text-4xl md:text-5xl font-bold mb-6">ようこそ、KAITOの世界へ</h1>
-      <p class="text-xl text-gray-700 max-w-3xl mb-6">
-        ここでは日々の気づきや技術的なメモ、旅の記録などをゆるく書いています。
-      </p>
-    </section>
+  <!-- 地図 -->
+  <div class="w-2/3">
+    <div id="articles-map"></div>
+  </div>
 
-    <!-- 記事マップ -->
-    <section>
-      <h2 class="text-3xl font-bold mb-6">記事マップ</h2>
-      <div id="articles-map"></div>
-    </section>
+</div>
 
-    <!-- 最近の記事一覧 -->
-    <section>
-      <h2 class="text-3xl font-bold mb-6">最近の記事</h2>
-      <div id="recent-articles" class="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3"></div>
-      <p id="no-articles" class="text-gray-500 mt-8 hidden">まだ記事がありません。</p>
-    </section>
+<script>
+const map = L.map('articles-map').setView([46.0,2.0],5);
 
-  </main>
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+  attribution:'&copy; OpenStreetMap'
+}).addTo(map);
 
-  <!-- Footer -->
-  <div id="footer"></div>
+let allFeatures = [];
+let currentLayer;
 
-  <!-- Leaflet JS -->
- 　<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+fetch("/kaimonde/data/articles.geojson")
+.then(res=>res.json())
+.then(data=>{
+  allFeatures = data.features;
+  renderMarkers();
+  map.on("zoomend", renderMarkers);
+});
 
-  <!-- 記事・マップ JS -->
-  <script>
-    // Leaflet 地図初期化
-    const map = L.map('articles-map').setView([46.0, 2.0], 5);
+function getGroupKey(props, zoom){
+  if(zoom < 6){
+    return props.country || "global";
+  }
+  if(zoom < 9){
+    return props.region || props.country;
+  }
+  return props.city || props.region || props.country;
+}
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
+function getRepresentativeFeature(group){
+  return group[0]; // 代表点は最初の記事の座標を使用
+}
 
-    fetch("/kaimonde/data/articles.geojson")
-      .then(res => res.json())
-      .then(data => {
-        if (!data || !data.features || data.features.length === 0) return;
+function renderMarkers(){
 
-        const articles = data.features.map(f => f.properties);
+  if(currentLayer) currentLayer.remove();
 
-        // 最近の記事（新しい順に最大6件）
-        const recentContainer = document.getElementById('recent-articles');
-        const recentArticles = articles.sort((a,b) => new Date(b.date)-new Date(a.date)).slice(0,6);
-        if(recentArticles.length === 0) document.getElementById('no-articles').classList.remove('hidden');
-        else document.getElementById('no-articles').classList.add('hidden');
+  const zoom = map.getZoom();
+  const groups = {};
 
-        recentArticles.forEach(article => {
-          const card = document.createElement('a');
-          card.href = article.url;
-          card.className = "block bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition duration-200";
-          const city = article.city || '';
-          const country = article.country || '';
-          const location = (city || country) ? `📍 ${city}${city && country?', ':''}${country}` : '';
-          card.innerHTML = `
-            <p class="text-sm text-gray-500">${article.date} ・ ${article.category.join(', ')}</p>
-            <h3 class="text-xl font-semibold mt-2">${article.title}</h3>
-            <p class="text-gray-600 mt-3">${article.description}</p>
-            ${location ? `<p class="text-xs text-gray-400 mt-4">${location}</p>` : ''}
-          `;
-          recentContainer.appendChild(card);
-        });
+  allFeatures.forEach(f=>{
+    const key = getGroupKey(f.properties, zoom);
+    if(!groups[key]) groups[key] = [];
+    groups[key].push(f);
+  });
 
-        // マップ描画
-        let geoLayer;
-        function getFeaturesByZoom() {
-          const zoom = map.getZoom();
-          return data.features.filter(f => {
-            const level = f.properties.level;
-            if(zoom < 6) return level==='global'||level==='country';
-            if(zoom < 9) return level==='region';
-            return level==='city';
-          });
-        }
+  currentLayer = L.layerGroup();
 
-        function renderMap() {
-          if(geoLayer) geoLayer.remove();
-          const featuresToShow = getFeaturesByZoom();
-          geoLayer = L.geoJSON(featuresToShow, {
-            pointToLayer: (feature, latlng) => L.marker(latlng),
-            onEachFeature: (feature, layer) => {
-              const props = feature.properties;
-              const city = props.city || '';
-              const country = props.country || '';
-              const location = (city || country) ? `${city}${city && country?', ':''}${country}` : '';
-              let popupHTML = `
-                <strong>${props.title}</strong><br>
-                ${props.description}<br>
-                ${props.date}<br>
-                ${props.category.join(', ')}<br>
-                ${location ? '📍 '+location+'<br>':''}
-                <a href="${props.url}" target="_blank">記事を見る</a>
-              `;
-              layer.bindPopup(popupHTML);
-            }
-          }).addTo(map);
-        }
+  Object.values(groups).forEach(group=>{
+    const rep = getRepresentativeFeature(group);
+    const latlng = [
+      rep.geometry.coordinates[1],
+      rep.geometry.coordinates[0]
+    ];
 
-        renderMap();
-        map.on('zoomend', renderMap);
+    const marker = L.marker(latlng).addTo(currentLayer);
 
-      })
-      .catch(err => console.error("Articles load failed:", err));
-  </script>
+    marker.on("click", ()=>{
+      showArticles(group);
+    });
 
-  <!-- 共通コンポーネント -->
-  <script src="/kaimonde/components/load-components.js"></script>
+  });
+
+  currentLayer.addTo(map);
+}
+
+function showArticles(group){
+
+  const container = document.getElementById("article-list");
+  container.innerHTML = "";
+
+  group.sort((a,b)=>new Date(b.properties.date)-new Date(a.properties.date));
+
+  group.forEach(f=>{
+    const p = f.properties;
+
+    const card = document.createElement("a");
+    card.href = p.url;
+    card.className = "block border-b py-4 hover:bg-gray-50 transition";
+
+    card.innerHTML = `
+      <p class="text-sm text-gray-500">${p.date}</p>
+      <h3 class="font-semibold text-lg">${p.title}</h3>
+      <p class="text-gray-600 text-sm mt-1">${p.description}</p>
+      <p class="text-xs text-gray-400 mt-2">${(p.city||'') + ' ' + (p.country||'')}</p>
+    `;
+
+    container.appendChild(card);
+  });
+}
+</script>
 
 </body>
 </html>
