@@ -28,11 +28,21 @@
   <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
 
     <!-- タイトル -->
-    <section class="mb-12">
+    <section class="mb-6">
       <h1 class="text-4xl md:text-5xl font-bold mb-4">Articles</h1>
       <p class="text-gray-600 text-lg">
-        都市計画、交通、留学生活、旅行記などについての記事一覧。
+        都市計画、交通、留学生活、旅行記などの記事一覧です。
       </p>
+    </section>
+
+    <!-- カテゴリ選択 -->
+    <section class="mb-8">
+      <label for="category-filter" class="block text-gray-700 font-medium mb-2">
+        カテゴリで絞り込む:
+      </label>
+      <select id="category-filter" class="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+        <option value="">すべて</option>
+      </select>
     </section>
 
     <!-- 記事一覧 -->
@@ -41,9 +51,7 @@
            class="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
       </div>
 
-      <!-- 記事がない場合 -->
-      <p id="no-articles"
-         class="text-gray-500 mt-8 hidden">
+      <p id="no-articles" class="text-gray-500 mt-8 hidden">
         まだ記事がありません。
       </p>
     </section>
@@ -53,7 +61,7 @@
   <!-- Footer -->
   <div id="footer"></div>
 
-  <!-- 記事読み込みスクリプト（GeoJSON対応、null安全） -->
+  <!-- 記事読み込みスクリプト -->
   <script>
     fetch("/kaimonde/data/articles.geojson")
       .then(res => res.json())
@@ -61,45 +69,69 @@
 
         const container = document.getElementById("articles-list");
         const emptyMessage = document.getElementById("no-articles");
+        const categoryFilter = document.getElementById('category-filter');
 
         if (!data || !data.features || data.features.length === 0) {
           emptyMessage.classList.remove("hidden");
           return;
         }
 
-        // properties を取り出して配列化
-        const articles = data.features.map(feature => feature.properties);
+        // properties を配列化
+        const articles = data.features.map(f => f.properties);
 
         // 日付の新しい順に並び替え
         articles.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-        articles.forEach(article => {
-
-          const card = document.createElement("a");
-          card.href = article.url;
-          card.className =
-            "block bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition duration-200";
-
-          // city / country が null の場合は空文字にする
-          const city = article.city ? article.city : '';
-          const country = article.country ? article.country : '';
-          const location = (city || country) ? `📍 ${city}${city && country ? ', ' : ''}${country}` : '';
-
-          card.innerHTML = `
-            <p class="text-sm text-gray-500">
-              ${article.date} ・ ${article.category}
-            </p>
-            <h3 class="text-xl font-semibold mt-2">
-              ${article.title}
-            </h3>
-            <p class="text-gray-600 mt-3">
-              ${article.description}
-            </p>
-            ${location ? `<p class="text-xs text-gray-400 mt-4">${location}</p>` : ''}
-          `;
-
-          container.appendChild(card);
+        // タグ一覧作成
+        const allCategories = new Set();
+        articles.forEach(a => a.category.forEach(c => allCategories.add(c)));
+        Array.from(allCategories).sort().forEach(c => {
+          const opt = document.createElement('option');
+          opt.value = c;
+          opt.textContent = c;
+          categoryFilter.appendChild(opt);
         });
+
+        // 記事描画関数
+        function renderArticles(filterCategory = '') {
+          container.innerHTML = '';
+          const filtered = articles.filter(a => 
+            !filterCategory || a.category.includes(filterCategory)
+          );
+
+          if(filtered.length === 0){
+            emptyMessage.classList.remove("hidden");
+          } else {
+            emptyMessage.classList.add("hidden");
+          }
+
+          filtered.forEach(article => {
+            const card = document.createElement("a");
+            card.href = article.url;
+            card.className =
+              "block bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition duration-200";
+
+            const city = article.city || '';
+            const country = article.country || '';
+            const location = (city || country) ? `📍 ${city}${city && country ? ', ' : ''}${country}` : '';
+
+            card.innerHTML = `
+              <p class="text-sm text-gray-500">
+                ${article.date} ・ ${article.category.join(', ')}
+              </p>
+              <h3 class="text-xl font-semibold mt-2">${article.title}</h3>
+              <p class="text-gray-600 mt-3">${article.description}</p>
+              ${location ? `<p class="text-xs text-gray-400 mt-4">${location}</p>` : ''}
+            `;
+            container.appendChild(card);
+          });
+        }
+
+        // 初期表示
+        renderArticles();
+
+        // 絞り込み
+        categoryFilter.addEventListener('change', e => renderArticles(e.target.value));
 
       })
       .catch(err => {
