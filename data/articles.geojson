@@ -11,7 +11,7 @@
       "properties": {
         "title": "EUにおける持続可能な都市政策",
         "date": "2026-01-10",
-        "category": "都市政策",
+        "category": ["都市政策"],
         "level": "global",
         "country": null,
         "region": null,
@@ -30,7 +30,7 @@
       "properties": {
         "title": "フランスの交通政策改革",
         "date": "2026-02-20",
-        "category": "交通",
+        "category": ["交通"],
         "level": "country",
         "country": "France",
         "region": null,
@@ -49,7 +49,7 @@
       "properties": {
         "title": "Occitanie州の地域交通戦略",
         "date": "2026-03-05",
-        "category": "地域政策",
+        "category": ["交通","地域政策"],
         "level": "region",
         "country": "France",
         "region": "Occitanie",
@@ -68,7 +68,7 @@
       "properties": {
         "title": "モンペリエのトラム計画",
         "date": "2026-02-01",
-        "category": "都市計画",
+        "category": ["交通","都市計画"],
         "level": "city",
         "country": "France",
         "region": "Occitanie",
@@ -87,7 +87,7 @@
       "properties": {
         "title": "モンペリエの自転車政策",
         "date": "2026-03-01",
-        "category": "交通",
+        "category": ["交通"],
         "level": "city",
         "country": "France",
         "region": "Occitanie",
