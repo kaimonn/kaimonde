@@ -95,7 +95,16 @@ body{
   display: block;
   margin-top: 0.25rem;
 }
-
+.law-blockquote .law-translation {
+  display: block;
+  margin-top: 0.5rem;
+  font-style: normal;
+  color: #111827; /* 原文より濃くして訳文を目立たせる */
+  background-color: #f9fafb; /* 薄いグレー背景で区切る */
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.25rem;
+  font-size: 0.95rem;
+}
 /* 長文引用（改行保持） */
 .law-pre {
   background-color: #f3f4f6; /* gray-100 */
