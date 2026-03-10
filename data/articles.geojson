@@ -17,7 +17,7 @@
           "subregion": null,
           "country": null,
           "region": null,
-          "city": null,
+          "city": null
       },
       "description": "EU全体で進む持続可能都市戦略の比較分析。",
       "url": "/kaimonde/pages/article-eu-policy.html"
@@ -39,7 +39,7 @@
           "subregion": "Western Europe",
           "country": "France",
           "region": null,
-          "city": null,
+          "city": null
         },
         "description": "全国レベルで進む鉄道・公共交通改革の整理。",
         "url": "/kaimonde/pages/article-france-transport.html"
@@ -61,7 +61,7 @@
           "subregion": "Western Europe",
           "country": "France",
           "region": "Occitanie",
-          "city": null,
+          "city": null
         },
         "description": "フランス南部オクシタニー地域の広域交通計画。",
         "url": "/kaimonde/pages/article-occitanie-transport.html"
@@ -83,7 +83,7 @@
           "subregion": "Western Europe",
           "country": "France",
           "region": "Occitanie",
-          "city": "Montpellier",
+          "city": "Montpellier"
         },
         "description": "フランス地方都市におけるLRT整備の事例。",
         "url": "/kaimonde/pages/article-montpellier-tram.html"
@@ -105,33 +105,35 @@
           "subregion": "Western Europe",
           "country": "France",
           "region": "Occitanie",
-          "city": "Montpellier",
+          "city": "Montpellier"
         },
         "description": "自転車インフラ拡充とモーダルシフト戦略。",
         "url": "/kaimonde/pages/article-montpellier-bike.html"
       }
     },
-{
-  "type": "Feature",
-  "geometry": {
-    "type": "Point",
-    "coordinates": [2.3522, 48.8566]
-  },
-  "properties": {
-    "title": "フランスの行政区分の階層構造",
-    "date": "2026-03-10",
-    "category": ["行政", "制度", "交通政策"],
-    "location": {
-      "continent": "Europe",
-      "subregion": "Western Europe",
-      "country": "France",
-      "region": null,
-      "city": null,
-    },
-    "description": "コミューン・県・地域圏からEPCIまで、フランスの行政区分の階層構造とNOTRe法による再編を整理する。交通政策主体の理解の前提となる制度を解説。",
-    "url": "/kaimonde/pages/articles/article1/article1.html"
-  }
-}
+
+
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [2.3522, 48.8566]
+      },
+      "properties": {
+        "title": "フランスの行政区分の階層構造",
+        "date": "2026-03-10",
+        "category": ["行政", "制度", "交通政策"],
+        "location": {
+          "continent": "Europe",
+          "subregion": "Western Europe",
+          "country": "France",
+          "region": null,
+          "city": null
+        },
+        "description": "コミューン・県・地域圏からEPCIまで、フランスの行政区分の階層構造とNOTRe法による再編を整理する。交通政策主体の理解の前提となる制度を解説。",
+        "url": "/kaimonde/pages/articles/article1/article1.html"
+      }
+    }
 
 
 
