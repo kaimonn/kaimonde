@@ -2,7 +2,7 @@
 <html lang="ja" class="scroll-smooth">
 
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
 <title>フランスの行政区分の階層構造 - KaiMonde</title>
@@ -17,9 +17,48 @@
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
+
 body{
 font-family:'Noto Sans JP','Inter',system-ui,sans-serif;
 }
+
+/* ===== 記事本文スタイル ===== */
+
+.article-content{
+line-height:1.8;
+max-width:900px;
+margin:auto;
+}
+
+.article-content h1{
+border-bottom:3px solid #333;
+padding-bottom:10px;
+margin-top:40px;
+}
+
+.article-content h2{
+margin-top:40px;
+border-left:6px solid #444;
+padding-left:10px;
+}
+
+.article-content table{
+border-collapse:collapse;
+width:100%;
+margin:20px 0;
+}
+
+.article-content th,
+.article-content td{
+border:1px solid #ccc;
+padding:8px;
+}
+
+.article-content code{
+background:#f5f5f5;
+padding:3px 6px;
+}
+
 </style>
 
 </head>
@@ -31,7 +70,7 @@ font-family:'Noto Sans JP','Inter',system-ui,sans-serif;
 <div id="header"></div>
 
 
-<main class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+<main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
 
 <!-- パンくず -->
 <nav class="text-sm text-gray-500 mb-6">
@@ -42,7 +81,7 @@ font-family:'Noto Sans JP','Inter',system-ui,sans-serif;
 
 
 <!-- 記事ヘッダー -->
-<header class="mb-12">
+<header class="mb-12 max-w-3xl">
 
 <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-4">
 フランスの行政区分の階層構造
@@ -61,95 +100,67 @@ font-family:'Noto Sans JP','Inter',system-ui,sans-serif;
 
 
 <!-- 記事本文 -->
-<article class="prose prose-lg max-w-none">
+<article class="article-content">
 
 <p>
 フランスの行政制度は、コミューン・県・地域圏という三層の地方自治体を基本としている。
 さらにコミューン間協力組織であるEPCIが行政サービスの実施主体として重要な役割を担っている。
 </p>
 
-<p>
-本記事ではフランスの行政区分の階層構造と、その制度的背景を整理する。
-特に2015年のNOTRe法による行政改革について概観し、交通政策との関係にも触れる。
-</p>
-
-
-<h2>フランスの地方公共団体</h2>
+<h2>地方公共団体</h2>
 
 <p>
-フランス憲法第72条は地方公共団体（collectivités territoriales）として
-以下の自治体を規定している。
+フランス憲法第72条は地方公共団体として以下を規定している。
 </p>
 
-<ul>
-<li>Commune（コミューン）</li>
-<li>Département（県）</li>
-<li>Région（地域圏）</li>
-</ul>
+<table>
 
+<tr>
+<th>階層</th>
+<th>名称</th>
+<th>役割</th>
+</tr>
 
-<h2>国家行政区画</h2>
+<tr>
+<td>基礎自治体</td>
+<td>Commune</td>
+<td>都市計画、住民サービス</td>
+</tr>
 
-<p>
-これとは別に、国家行政のための区画として以下が存在する。
-</p>
+<tr>
+<td>中間自治体</td>
+<td>Département</td>
+<td>社会福祉、道路</td>
+</tr>
 
-<ul>
-<li>Arrondissement</li>
-<li>Canton</li>
-</ul>
+<tr>
+<td>広域自治体</td>
+<td>Région</td>
+<td>経済政策、交通</td>
+</tr>
 
-<p>
-これらは自治体ではなく、行政管理や選挙区の単位として使用される。
-</p>
-
-
-<h2>コミューン間協力制度</h2>
-
-<p>
-フランスには約3万5000のコミューンが存在し、
-多くが人口数百人規模の小規模自治体である。
-</p>
-
-<p>
-そのため複数コミューンが共同で公共サービスを提供する
-インターコミュナリテ制度が発展した。
-</p>
+</table>
 
 
 <h2>EPCI制度</h2>
 
 <p>
 EPCI（Établissement public de coopération intercommunale）は
-コミューン間の協力組織であり、以下のような類型が存在する。
+コミューン間の協力組織であり、公共サービスを共同で提供する。
+</p>
+
+<code>EPCI à fiscalité propre</code>
+
+<p>
+として以下の類型が存在する。
 </p>
 
 <ul>
 
 <li>Communauté de communes</li>
-
 <li>Communauté d'agglomération</li>
-
 <li>Communauté urbaine</li>
-
 <li>Métropole</li>
-
-</ul>
-
-
-<h2>NOTRe法による行政改革</h2>
-
-<p>
-2015年のNOTRe法はフランスの地方行政制度を大きく再編した。
-</p>
-
-<ul>
-
-<li>地域圏の統合（22 → 13）</li>
-
-<li>EPCIの統合促進</li>
-
-<li>自治体の役割整理</li>
 
 </ul>
 
@@ -166,21 +177,7 @@ EPCI（Établissement public de coopération intercommunale）は
 
 </pre>
 
-
-<h2>交通政策との関係</h2>
-
-<p>
-フランスでは都市交通政策の多くがEPCIやメトロポールによって実施される。
-</p>
-
-<p>
-次の記事では交通政策主体であるAOM（Autorité organisatrice de la mobilité）
-の制度について解説する。
-</p>
-
-
 </article>
-
 
 </main>
 
@@ -191,7 +188,6 @@ EPCI（Établissement public de coopération intercommunale）は
 
 <!-- 共通コンポーネント -->
 <script src="/kaimonde/components/load-components.js"></script>
-
 
 </body>
 </html>
