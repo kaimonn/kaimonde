@@ -148,7 +148,20 @@ function renderMarkers(){
 
   currentLayer.addTo(map);
 }
+function formatLocation(loc){
+  if(!loc) return "";
 
+  if(loc.country){
+    // city, region, country を / 区切りで結合
+    return [loc.city, loc.region, loc.country]
+      .filter(Boolean)
+      .join(" / ");
+  }
+
+  // country が無い場合は大陸を表示
+  return loc.continent || "";
+}
+  
 function showArticles(group){
 
   const container = document.getElementById("article-list");
@@ -168,7 +181,7 @@ function showArticles(group){
       <h4 class="font-semibold text-lg">${p.title}</h4>
       <p class="text-gray-600 text-sm mt-1">${p.description}</p>
       <p class="text-xs text-gray-400 mt-2">
-        📍${(p.city||'')} ${(p.region||'')} ${(p.country||'')}
+        📍${formatLocation(loc)}
       </p>
     `;
 
@@ -204,7 +217,7 @@ function renderRecentArticles(){
       <h3 class="text-xl font-semibold mt-2">${p.title}</h3>
       <p class="text-gray-600 mt-3">${p.description}</p>
       <p class="text-xs text-gray-400 mt-2">
-        📍${(p.city||'')} ${(p.region||'')} ${(p.country||'')}
+        📍${formatLocation(loc)}
       </p>
     `;
 
