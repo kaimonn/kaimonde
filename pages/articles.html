@@ -63,6 +63,7 @@
   <!-- Footer -->
   <div id="footer"></div>
 
+  <script src="/kaimonde/js/LocationBadge.js"></script>
   <!-- 記事読み込みスクリプト -->
   <script>
     fetch("/kaimonde/data/articles.geojson")
@@ -123,8 +124,10 @@
               </p>
               <h3 class="text-xl font-semibold mt-2">${article.title}</h3>
               <p class="text-gray-600 mt-3">${article.description}</p>
-              ${location ? `<p class="text-xs text-gray-400 mt-4">${location}</p>` : ''}
             `;
+              // LocationBadge を作って挿入
+              const locBadge = LocationBadge(article.location);
+              card.appendChild(locBadge);
             container.appendChild(card);
           });
         }
