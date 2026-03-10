@@ -71,3 +71,46 @@ body{
   background:#f5f5f5;
   padding:3px 6px;
 }
+
+/* ===== 引用用スタイル ===== */
+
+/* ブロック引用（条文・引用文） */
+.law-blockquote {
+  border-left: 4px solid #9CA3AF;  /* 左線 gray-400 */
+  padding-left: 1rem;
+  font-style: italic;
+  color: #374151; /* gray-700 */
+  margin: 1rem 0;
+}
+
+/* 条文番号や法律名 */
+.law-blockquote .law-title {
+  font-weight: bold;
+  font-style: normal; /* 異体字と区別 */
+}
+
+/* 条文本文 */
+.law-blockquote .law-text {
+  font-style: italic;
+  display: block;
+  margin-top: 0.25rem;
+}
+
+/* 長文引用（改行保持） */
+.law-pre {
+  background-color: #f3f4f6; /* gray-100 */
+  padding: 1rem;
+  border-radius: 0.375rem; /* rounded-md */
+  overflow-x: auto;
+  font-family: 'Courier New', monospace;
+  font-size: 0.875rem; /* small */
+  margin: 1rem 0;
+}
+
+/* 出典・脚注 */
+.law-cite {
+  font-size: 0.875rem;
+  color: #6B7280; /* gray-500 */
+  margin-top: 0.25rem;
+  display: block;
+}
