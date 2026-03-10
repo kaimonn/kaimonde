@@ -102,9 +102,14 @@ fetch("/kaimonde/data/articles.geojson")
 });
 
 function getGroupKey(props, zoom){
-  if(zoom < 6) return props.country || "global";
-  if(zoom < 9) return props.region || props.country;
-  return props.city || props.region || props.country;
+  const loc = props.location;
+
+  if(zoom < 4) return loc.continent || "world";
+  if(zoom < 6) return loc.subregion || loc.continent;
+  if(zoom < 8) return loc.country || loc.subregion;
+  if(zoom < 10) return loc.region || loc.country;
+
+  return loc.city || loc.region || loc.country;
 }
 
 function renderMarkers(){
@@ -171,7 +176,8 @@ function showArticles(group){
 
   group.forEach(f=>{
     const p = f.properties;
-
+    const loc = p.location;
+    
     const card = document.createElement("a");
     card.href = p.url;
     card.className="block border-b py-4 hover:bg-gray-50 transition";
@@ -205,7 +211,8 @@ function renderRecentArticles(){
 
   sorted.forEach(f=>{
     const p = f.properties;
-
+    const loc = p.location;
+    
     const card = document.createElement("a");
     card.href = p.url;
     card.className="block bg-white p-6 rounded-xl shadow hover:shadow-md transition";
